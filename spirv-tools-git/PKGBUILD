@@ -1,39 +1,29 @@
-#_                   _ _ _  _ _____ _  _
-#| | _______   ____ _| | | || |___  | || |
-#| |/ / _ \ \ / / _` | | | || |_ / /| || |_
-#|   <  __/\ V / (_| | | |__   _/ / |__   _|
-#|_|\_\___| \_/ \__,_|_|_|  |_|/_/     |_|
+# _     _            _        _          _____
+#| |__ | | __ _  ___| | _____| | ___   _|___ /
+#| '_ \| |/ _` |/ __| |/ / __| |/ / | | | |_ \
+#| |_) | | (_| | (__|   <\__ \   <| |_| |___) |
+#|_.__/|_|\__,_|\___|_|\_\___/_|\_\\__, |____/
+#                                  |___/
 
-#Maintainer: kevall474 <kevall474@tuta.io> <https://github.com/kevall474>
+#Maintainer: blacksky3 <blacksky3@tuta.io> <https://github.com/blacksky3>
 #Credits: Laurent Carlier <lordheavym@gmail.com>
-
-#######################################
-
-#Set '1' to build with GCC
-#Set '2' to build with CLANG
-#Default is empty. It will build with GCC. To build with different compiler just use : env _compiler=(1 or 2) makepkg -s
-if [ -z ${_compiler+x} ]; then
-  _compiler=
-fi
-
-#######################################
 
 pkgname=spirv-tools-git
 pkgdesc='API and commands for processing SPIR-V modules. (git version)'
 pkgver=2021.3.r24.g1454c95d1
 pkgrel=1
-arch=('x86_64')
+arch=(x86_64)
 url='https://github.com/KhronosGroup/SPIRV-Tools.git'
 license=(Apache-2.0)
-makedepends=('make' 'cmake' 'git' 'extra-cmake-modules' 'python' 'ninja' 'clang' 'llvm' 'llvm-libs' 'gcc' 'gcc-libs')
-depends=('gcc-libs' 'llvm-libs')
-conflicts=('spirv-tools')
-provides=('spirv-tools' 'spirv-tools-git')
-source=('SPIRV-Tools::git+https://github.com/KhronosGroup/SPIRV-Tools.git')
-md5sums=('SKIP')
+makedepends=(make cmake git python ninja gcc gcc-libs)
+depends=(gcc-libs)
+conflicts=(spirv-tools)
+provides=(spirv-tools spirv-tools-git)
+source=(git+https://github.com/KhronosGroup/SPIRV-Tools.git)
+md5sums=(SKIP)
 
 pkgver(){
-  cd SPIRV-Tools
+  cd ${srcdir}/SPIRV-Tools
 
   # cutting off 'foo-' prefix that presents in the git tag
   #git describe --long | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
@@ -44,7 +34,7 @@ pkgver(){
 }
 
 prepare(){
-  cd SPIRV-Tools
+  cd ${srcdir}/SPIRV-Tools
   rm -rf external/{spirv-headers,effcee,re2,googletest,protobuf}
   git clone https://github.com/KhronosGroup/SPIRV-Headers.git external/spirv-headers
   git clone https://github.com/google/effcee.git external/effcee
@@ -54,18 +44,7 @@ prepare(){
 }
 
 build(){
-if [[ $_compiler = "1" ]]; then
-  export CC="gcc"
-  export CXX="g++"
-elif [[ $_compiler = "2" ]]; then
-  export CC="clang"
-  export CXX="clang++"
-else
-  export CC="gcc"
-  export CXX="g++"
-fi
-
-  cd SPIRV-Tools
+  cd ${srcdir}/SPIRV-Tools
 
   rm -rf build_64-{static,shared}
 
@@ -114,7 +93,7 @@ fi
 
 package_spirv-tools-git(){
   #DESTDIR="$pkgdir" ninja -C SPIRV-Tools/build_64-static/ install
-  DESTDIR="$pkgdir" ninja -C SPIRV-Tools/build_64-shared/ install
+  DESTDIR="$pkgdir" ninja -C ${srcdir}/SPIRV-Tools/build_64-shared/ install
 
   #rm -rf $pkgdir/usr/bin
 

@@ -1,55 +1,34 @@
-#_                   _ _ _  _ _____ _  _
-#| | _______   ____ _| | | || |___  | || |
-#| |/ / _ \ \ / / _` | | | || |_ / /| || |_
-#|   <  __/\ V / (_| | | |__   _/ / |__   _|
-#|_|\_\___| \_/ \__,_|_|_|  |_|/_/     |_|
+# _     _            _        _          _____
+#| |__ | | __ _  ___| | _____| | ___   _|___ /
+#| '_ \| |/ _` |/ __| |/ / __| |/ / | | | |_ \
+#| |_) | | (_| | (__|   <\__ \   <| |_| |___) |
+#|_.__/|_|\__,_|\___|_|\_\___/_|\_\\__, |____/
+#                                  |___/
 
-#Maintainer: kevall474 <kevall474@tuta.io> <https://github.com/kevall474>
+#Maintainer: blacksky3 <blacksky3@tuta.io> <https://github.com/blacksky3>
 #Credits: Felix Yan <felixonmars@archlinux.org
 
-#######################################
-
-#Set '1' to build with GCC
-#Set '2' to build with CLANG
-#Default is empty. It will build with GCC. To build with different compiler just use : env _compiler=(1 or 2) makepkg -s
-if [ -z ${_compiler+x} ]; then
-  _compiler=
-fi
-
-#######################################
-
 pkgname=spirv-headers-git
-pkgdesc='SPIR-V Headers'
+pkgdesc='SPIR-V Headers (git version)'
 pkgver=1.5.4.raytracing.fixed.r107.g635049b
 pkgrel=1
-arch=('x86_64')
+arch=(x86_64)
 url='https://github.com/KhronosGroup/SPIRV-Headers.git'
 license=(MIT)
-makedepends=('make' 'cmake' 'git' 'extra-cmake-modules' 'clang' 'llvm' 'llvm-libs' 'gcc' 'gcc-libs' 'ninja')
-conflicts=('spirv-headers')
-provides=('spirv-headers' 'spirv-headers-git')
-source=('SPIRV-Headers::git+https://github.com/KhronosGroup/SPIRV-Headers.git')
-md5sums=('SKIP')
+makedepends=(make cmake git gcc gcc-libs ninja)
+conflicts=(spirv-headers)
+provides=(spirv-headers spirv-headers-git)
+source=(git+https://github.com/KhronosGroup/SPIRV-Headers.git)
+md5sums=(SKIP)
 
 pkgver(){
-  cd SPIRV-Headers
+  cd ${srcdir}/SPIRV-Headers
   git describe --long | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
   #git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
 }
 
 build(){
-if [[ $_compiler = "1" ]]; then
-  export CC="gcc"
-  export CXX="g++"
-elif [[ $_compiler = "2" ]]; then
-  export CC="clang"
-  export CXX="clang++"
-else
-  export CC="gcc"
-  export CXX="g++"
-fi
-
-  cd SPIRV-Headers
+  cd ${srcdir}/SPIRV-Headers
 
   rm -rf build
 
@@ -66,7 +45,7 @@ fi
 }
 
 package(){
-  DESTDIR="$pkgdir" ninja -C SPIRV-Headers/build/ install
+  DESTDIR="$pkgdir" ninja -C ${srcdir}/SPIRV-Headers/build/ install
 
   # install licence
   install -Dm644 "${srcdir}"/SPIRV-Headers/LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"

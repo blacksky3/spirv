@@ -10,8 +10,8 @@
 
 pkgname=spirv-tools-git
 pkgdesc='API and commands for processing SPIR-V modules. (git version)'
-pkgver=2021.3.r24.g1454c95d1
-pkgrel=1
+pkgver=2022.2.r19.g98340ec50
+pkgrel=2
 arch=(x86_64)
 url='https://github.com/KhronosGroup/SPIRV-Tools.git'
 license=(Apache-2.0)
@@ -29,15 +29,15 @@ pkgver(){
   git describe --long --tags | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
 }
 
-prepare(){
-  cd ${srcdir}/SPIRV-Tools
-  rm -rf external/{spirv-headers,effcee,re2,googletest,protobuf}
-  git clone https://github.com/KhronosGroup/SPIRV-Headers.git external/spirv-headers
-  git clone https://github.com/google/effcee.git external/effcee
-  git clone https://github.com/google/re2.git external/re2
-  #git clone https://github.com/google/googletest.git external/googletest
-  #git clone https://github.com/protocolbuffers/protobuf.git external/protobuf
-}
+# prepare(){
+#   cd ${srcdir}/SPIRV-Tools
+#   rm -rf external/{spirv-headers,effcee,re2,googletest,protobuf}
+#   git clone https://github.com/KhronosGroup/SPIRV-Headers.git external/spirv-headers
+#   git clone https://github.com/google/effcee.git external/effcee
+#   git clone https://github.com/google/re2.git external/re2
+#   #git clone https://github.com/google/googletest.git external/googletest
+#   #git clone https://github.com/protocolbuffers/protobuf.git external/protobuf
+# }
 
 build(){
   cd ${srcdir}/SPIRV-Tools
@@ -80,7 +80,8 @@ build(){
   -DSPIRV_SKIP_EXECUTABLES=OFF \
   -DSPIRV_SKIP_TESTS=OFF \
   -DENABLE_SPIRV_TOOLS_INSTALL=ON \
-  -DUSE_CCACHE=OFF
+  -DUSE_CCACHE=OFF \
+  -DSPIRV-Headers_SOURCE_DIR=/usr
   #-DSPIRV_BUILD_FUZZER=ON
 
   #ninja -C build_64-static

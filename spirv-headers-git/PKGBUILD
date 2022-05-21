@@ -11,8 +11,8 @@
 
 pkgname=spirv-headers-git
 pkgdesc='SPIR-V Headers (git version)'
-pkgver=1.5.4.raytracing.fixed.r107.g635049b
-pkgrel=1
+pkgver=1.5.4.raytracing.fixed.r166.gb765c35
+pkgrel=2
 arch=(x86_64)
 url='https://github.com/KhronosGroup/SPIRV-Headers.git'
 license=(MIT)

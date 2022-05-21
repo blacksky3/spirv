@@ -15,7 +15,7 @@ pkgrel=1
 arch=(x86_64)
 url='https://github.com/KhronosGroup/SPIRV-Tools.git'
 license=(Apache-2.0)
-makedepends=(make cmake git python ninja gcc gcc-libs)
+makedepends=(make cmake git python ninja gcc gcc-libs spirv-headers)
 depends=(gcc-libs)
 conflicts=(spirv-tools)
 provides=(spirv-tools spirv-tools-git)
@@ -91,8 +91,7 @@ package_spirv-tools-git(){
   #DESTDIR="$pkgdir" ninja -C SPIRV-Tools/build_64-static/ install
   DESTDIR="$pkgdir" ninja -C ${srcdir}/SPIRV-Tools/build_64-shared/ install
 
-  #rm -rf $pkgdir/usr/bin
-
   # install licence
-  install -Dm644 "${srcdir}"/SPIRV-Tools/LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
+  install -m644 "${srcdir}"/SPIRV-Tools/LICENSE "${pkgdir}"/usr/share/licenses/${pkgname}/
 }

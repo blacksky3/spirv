@@ -11,7 +11,7 @@
 
 pkgname=spirv-headers-git
 pkgdesc='SPIR-V Headers (git version)'
-pkgver=1.5.4.raytracing.fixed.r166.gb765c35
+pkgver=1.5.4.raytracing.fixed.r172.g36c0c15
 pkgrel=1
 arch=(x86_64)
 url='https://github.com/KhronosGroup/SPIRV-Headers.git'
@@ -25,8 +25,7 @@ md5sums=(SKIP)
 pkgver(){
   cd ${srcdir}/SPIRV-Headers
 
-  git describe --long | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
-  #git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+  git describe --long --tags --exclude sdk-* | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
 }
 
 build(){
